@@ -66,3 +66,11 @@ credentials/
 .claude/pai_updates/
 .claude/pai_backups/
 .claude/.pai-sync-history
+
+# PAI Personal Data (don't commit to public repo)
+inbox/raw/
+inbox/processed/
+inbox/archive/
+memory/short-term/
+memory/mid-term/
+memory/long-term/

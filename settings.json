@@ -1,0 +1,25 @@
+{
+  "identity": {
+    "name": "Claude",
+    "timezone": "Europe/Warsaw",
+    "language": "pl"
+  },
+  "paths": {
+    "pai_dir": "/home/pawel/.pai",
+    "telos": "/home/pawel/.pai/telos",
+    "memory": "/home/pawel/.pai/memory",
+    "logs": "/home/pawel/.pai/logs"
+  },
+  "features": {
+    "memory_enabled": true,
+    "auto_learning": true
+  },
+  "active_projects": [
+    {
+      "name": "inbox-system",
+      "status": "faza-2-in-progress",
+      "context_file": "memory/projects/inbox-system.md",
+      "priority": "high"
+    }
+  ]
+}
