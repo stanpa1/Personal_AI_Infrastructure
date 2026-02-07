@@ -1,7 +1,11 @@
 # Inbox System - Project Status
 
-**Last Updated:** 2026-02-07 17:15
+**Last Updated:** 2026-02-07 21:55
 **Status:** FAZA 4.3 Complete - Observatory Dashboard
+
+**Repositories:**
+- PAI Infrastructure: https://github.com/stanpa1/Personal_AI_Infrastructure
+- Voice App: https://github.com/stanpa1/pai-voice-app
 
 ---
 
