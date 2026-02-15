@@ -537,31 +537,50 @@ Rozwiązanie:
 
 ---
 
-## Deployment
+## Deployment ✅ Complete (2026-02-15)
 
-**(Instructions to be completed after testing)**
+**Initial deployment:**
+1. ✅ Uploaded 6 modules to /opt/inbox-webhook/
+2. ✅ Dependencies already installed
+3. ✅ Cron job configured (/etc/cron.d/pai-insights)
+4. ✅ Pipeline tested successfully
 
-1. Upload files to server
-2. Install dependencies
-3. Configure cron job
-4. Test pipeline
-5. Enable daily delivery
+**Integration fixes (2026-02-15):**
+1. ✅ Added insight_handler import to process_event.py (line 36)
+2. ✅ Added insight command detection before calendar handler (line 567)
+3. ✅ Fixed chat_id type conversion (string → int) in all send_message calls
+4. ✅ Added TELEGRAM_CHAT_ID=-1003590663382 to .env
+5. ✅ Reloaded systemd daemon and restarted inbox-worker service
+
+**Test results:**
+- ✅ Manual test via `/insight now` successful
+- ✅ Insight generated (QuestionToPonder about Minimax)
+- ✅ Saved to Notion successfully
+- ✅ Delivered to Telegram successfully
 
 ---
 
 ## Completion Notes
 
-**Status:** 🚧 In Progress - Implementation complete, testing pending
+**Status:** ✅ COMPLETE & OPERATIONAL (2026-02-15)
+
+**Implementation:**
+- Design & implementation: ~4h
+- Deployment & debugging: ~1.5h
+- Total time invested: ~5.5h
+
+**Completed:**
+1. ✅ Deployed to Hetzner server
+2. ✅ All 8 insight types implemented
+3. ✅ Notion integration working (saves as Type=Insight)
+4. ✅ Telegram commands functional
+5. ✅ Manual test successful (`/insight now` delivered)
+6. ✅ Automatic delivery scheduled (7:00 AM daily)
 
 **Next steps:**
-1. Deploy to Hetzner server
-2. Test all insight types
-3. Verify Notion integration
-4. Test Telegram commands
-5. Monitor first week of insights
-6. Adjust based on engagement
-
-**Time estimate:** ~1h deployment + 1 week observation
+- Monitor first week of automatic insights
+- Adjust based on engagement metrics
+- Optional: Fix Books DB integration (400 error - non-critical)
 
 ---
 
