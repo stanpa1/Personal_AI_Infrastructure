@@ -175,16 +175,20 @@ rsync -avz hetzner:/opt/inbox-webhook/downloads/ ~/.pai/inbox/raw/
 - `~/.pai/sync-from-hetzner.sh` - Hetzner → PC (auto przy starcie sesji)
 - Hook: `initialize-session.ts` wywołuje sync przy każdej sesji Claude
 
-### FAZA 2.6 - Notion Integration ✅ 2026-01-28
+### FAZA 2.6 - Notion Integration ✅ 2026-01-28 (Updated: 2026-02-15)
 
 - [x] Notion MCP configured (Claude.ai hosted)
-- [x] Note List database connected (ID: 9d5a78f7-c14e-44f8-b885-8cc5feaf99f8)
-- [x] Weekly Digest generator working
+- [x] Note List database connected (ID: cb912123-bf69-4623-b08c-43fd8e03d9cd)
+- [x] Weekly Digest generator working (manual via skill)
 - [x] First digest saved to Notion
 - [x] NotionDigest skill created (`~/.claude/skills/NotionDigest/`)
 - [x] NotionAutoType skill created (`~/.claude/skills/NotionAutoType/`)
 - [x] Scripts copied to `~/.pai/scripts/notion/`
-- [x] Cron job: Sunday 20:00 weekly digest reminder
+- [x] **Automatic Weekly Digest** - Sunday 20:00 CET (auto-send to Telegram) ✅ 2026-02-15
+  - `/opt/inbox-webhook/auto_weekly_digest.py` - Automatic digest generator
+  - `/etc/cron.d/pai-weekly-digest` - Cron job (19:00 UTC / 20:00 CET)
+  - Queries last 7 days by "Last Edited" property
+  - Organized by type, shows high-value content (Score >= 4), top tags
 
 **Skills created:**
 - `NotionDigest` - "wygeneruj weekly digest"

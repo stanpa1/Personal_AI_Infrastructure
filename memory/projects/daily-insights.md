@@ -455,6 +455,66 @@ cd /opt/inbox-webhook
 
 ---
 
+## Weekly Digest
+
+**Status:** ✅ DEPLOYED (2026-02-15)
+
+Automatic weekly summary of Note List activity sent every Sunday 20:00 CET.
+
+**Features:**
+- Summary by type (Article, Tool, Video, etc.)
+- High-value content (Score >= 4)
+- Top tags from the week
+- Detailed breakdown with first 5 entries per type
+- Insights (productivity level, dominant type)
+
+**New files:**
+- `/opt/inbox-webhook/auto_weekly_digest.py` - Main script
+- `/etc/cron.d/pai-weekly-digest` - Cron job (Sunday 19:00 UTC / 20:00 CET)
+
+**Usage:**
+```bash
+# Manual run
+ssh hetzner "cd /opt/inbox-webhook && /opt/inbox-webhook/venv/bin/python auto_weekly_digest.py"
+
+# Check logs
+ssh hetzner "tail -f /var/log/pai-weekly-digest.log"
+```
+
+**Telegram Output Example:**
+```
+📚 Weekly Digest: Note List
+📅 08.02 - 15.02.2026
+📊 Łącznie: 15 wpisów
+
+📂 Według typu:
+  • Article: 8
+  • Tool: 4
+  • Video: 3
+
+⭐ High Value (5 wpisów):
+  • Claude extended thinking patterns (Score: 5)
+  • Memory in AI Agents - Production Patterns (Score: 5)
+  ... i 3 więcej
+
+🏷️ Top tagi:
+  • AI: 7×
+  • productivity: 5×
+  • learning: 4×
+
+📑 Szczegóły:
+[... detailed breakdown by type ...]
+
+💡 Insights:
+  • Produktywny tydzień! 15 nowych wpisów
+  • Dominujący typ: Article (8 wpisów)
+
+---
+🤖 Automatyczne podsumowanie z PAI Daily Digest
+```
+
+---
+
 ## Future Enhancements (Optional)
 
 ### FAZA 4.11 - Advanced Features

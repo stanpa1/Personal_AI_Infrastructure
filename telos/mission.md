@@ -1,15 +1,23 @@
-# Twoja Misja
+# Misja
 
-## Kim jesteś?
-Programista pracujący z AI i automatyzacją.
+## Kim jestem
+Manager HR w międzynarodowej firmie. Zarządzam HR w Polsce
+i kilku krajach Europy. Buduję procesy, automatyzuję, usprawniam.
 
-## Co chcesz osiągnąć?
-- Efektywna praca z AI assistants
-- Budowanie projektów z pomocą AI
-- Nauka nowych technologii
+## Moje supermoce
+- Automatyzacja (Power Automate, SharePoint, AI)
+- Łączenie technologii z procesami ludzkimi
+- Słuchanie jako główna metoda przyswajania (audiobooki, podcasty, voice)
 
-## Jak AI powinien Ci pomagać?
-- Używaj języka polskiego
-- Bądź konkretny i praktyczny
-- Tłumacz kod gdy potrzeba
-- Pamiętaj moje preferencje
+## Co chcę osiągnąć
+
+### Zawodowo
+- Spokój i kontrola nad czasem
+- Profesjonalny angielski = większy wpływ
+- Być efektywnym bez stresu ostatniej chwili
+
+### Prywatnie
+- Napisać książkę sci-fi (AI, przyszłość, społeczeństwo)
+- Zbudować biznes z pasji (AI/automatyzacja)
+- Nauczyć synów przedsiębiorczości
+- Czas na rodzinę, bieganie, muzykę

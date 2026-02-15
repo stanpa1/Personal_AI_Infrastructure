@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "n8n-mcp",
+      "args": [],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n.stankowski.io/",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNjUwNmEyNS03NzlkLTRlYTEtOTk3My02ZTk2ODczYzVhMGYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzY3NTE2ODIyfQ._E3_kHsxyNrN-YuOoIcoMlk8zri-OPFpjGFP6YWulO4"
+      }
+    }
+  }
+}
