@@ -1,14 +1,17 @@
-# Google Calendar Integration - FAZA 4.8
+# Google Calendar Integration - FAZA 4.8 + 4.9
 
 **Status:** ✅ COMPLETE (2026-02-15)
 **Priority:** high
-**Time invested:** ~3h
+**Time invested:** ~3.5h
 
 ---
 
 ## Summary
 
 Full Google Calendar integration with PAI. Check calendar events and add new events via Telegram or voice app using natural language.
+
+**FAZA 4.8:** Core integration (API, Telegram, endpoints)
+**FAZA 4.9:** Voice app tools (checkCalendar, addCalendarEvent)
 
 ---
 
@@ -348,25 +351,60 @@ curl http://localhost:8001/api/calendar/tomorrow
 
 ---
 
-## Future Enhancements
+## FAZA 4.9 - Voice App Tools ✅ 2026-02-15
 
-### FAZA 4.9 - Smart Calendar Features (Optional)
+**Status:** Complete
 
-**1. Voice App Tools:**
-```typescript
-// liveClient.ts
-{
-  name: "checkCalendar",
-  parameters: { date?: string, days?: number }
-}
+Added calendar tools to voice app (voice.stankowski.io) following existing pattern.
 
-{
-  name: "addCalendarEvent",
-  parameters: { summary: string, start: string, duration?: number }
-}
+**Tools added to liveClient.ts:**
+
+1. **checkCalendar** - Query calendar events
+   ```typescript
+   {
+     name: 'checkCalendar',
+     description: 'Check calendar events...',
+     parameters: {
+       period: string,  // today, tomorrow, upcoming
+       days: string     // for upcoming (default: 7)
+     }
+   }
+   ```
+
+2. **addCalendarEvent** - Create new events
+   ```typescript
+   {
+     name: 'addCalendarEvent',
+     description: 'Create new calendar event...',
+     parameters: {
+       summary: string,     // required
+       start: string,       // ISO or natural language
+       duration: string,    // hours (default: 1.0)
+       description: string  // optional
+     }
+   }
+   ```
+
+**Voice commands:**
+```
+"What's on my calendar today?" → checkCalendar(period='today')
+"Co mam jutro?" → checkCalendar(period='tomorrow')
+"What's coming up?" → checkCalendar(period='upcoming', days='7')
+"Add meeting tomorrow at 2pm" → addCalendarEvent(summary='meeting', start='tomorrow at 2pm')
+"Dodaj spotkanie z Anią w piątek o 14" → addCalendarEvent(...)
 ```
 
-**2. Smart Features:**
+**Files changed:**
+- `/mnt/e/voice/nexus-voice-interface/services/liveClient.ts` (+48 lines)
+  - Added 2 tool definitions after line 229
+  - Added 2 handlers after line 485
+- `/var/www/pai-voice/` - Deployed updated build
+
+---
+
+## Future Enhancements (Optional)
+
+**Smart Features:**
 - Conflict detection: "Masz już event o tej godzinie"
 - Free time finder: "Kiedy mam 2h wolne?" → checks gaps
 - Recurring events: "dodaj meeting każdy poniedziałek 10:00"
@@ -421,9 +459,11 @@ Solution:
 - `/opt/inbox-webhook/calendar_handler.py` (new, 450 lines)
 - `/opt/inbox-webhook/process_event.py` (added calendar integration)
 - `/opt/inbox-webhook/pai_api.py` (added 4 endpoints, +169 lines)
+- `/var/www/pai-voice/` (voice app with calendar tools)
 
-**Local (Documentation):**
+**Local Files:**
 - `/home/pawel/.pai/memory/projects/google-calendar-integration.md` (this file)
+- `/mnt/e/voice/nexus-voice-interface/services/liveClient.ts` (added calendar tools, +48 lines)
 
 **Dependencies:**
 - `pytz` (installed)
@@ -441,6 +481,7 @@ Solution:
 - ✅ Can add events via Telegram
 - ✅ Natural language parsing works (PL + EN)
 - ✅ API endpoints accessible to voice app
+- ✅ Voice app tools integrated (checkCalendar, addCalendarEvent)
 - ✅ Events created successfully in user's calendar
 - ✅ Timezone handled correctly (Europe/Warsaw)
 - ✅ Integration tested end-to-end
@@ -458,9 +499,19 @@ Solution:
 
 ## Completion Notes
 
-**Implementation time:** ~3h (POC + handler + integration + testing)
+**Implementation time:** ~3.5h (POC + handler + Telegram integration + API + voice tools)
 **Effort:** Medium (Google API setup, NL parsing, multi-channel integration)
 **Impact:** High (calendar is core productivity tool)
 **ROI:** Excellent (voice/text calendar access is huge UX improvement)
 
-This completes Google Calendar Integration. PAI can now query and manage your calendar via Telegram and voice app.
+**What was built:**
+- Google Calendar API integration with service account
+- Natural language date/time parsing (Polish + English)
+- Telegram integration (query + add events)
+- PAI API endpoints (4 endpoints)
+- Voice app tools (checkCalendar, addCalendarEvent)
+
+This completes FAZA 4.8 + 4.9. PAI can now query and manage your calendar via:
+- Telegram text commands ("co mam jutro?", "dodaj spotkanie...")
+- Voice app conversations (natural voice queries and event creation)
+- Direct API access (for future integrations)
