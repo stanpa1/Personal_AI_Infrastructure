@@ -1,7 +1,7 @@
 # Inbox System - Project Status
 
-**Last Updated:** 2026-02-07 21:55
-**Status:** FAZA 4.3 Complete - Observatory Dashboard
+**Last Updated:** 2026-02-14 22:30
+**Status:** FAZA 4.5 Complete - Voice App Inbox Access
 
 **Repositories:**
 - PAI Infrastructure: https://github.com/stanpa1/Personal_AI_Infrastructure
@@ -47,6 +47,7 @@ Telegram → n8n → Google Drive
 |---------|------|--------|-------------|
 | `inbox-webhook.service` | 8010 | ✅ Running | FastAPI webhook receiver |
 | `inbox-worker.service` | - | ✅ Running | Queue processor (2s polling) |
+| `pai-api.service` | 8001 | ✅ Running | PAI Search API (voice app backend) |
 | `fastapi.service` | 8000 | ✅ Running | Main API (api.stankowski.io) |
 | `caddy` | 443 | ✅ Running | HTTPS reverse proxy |
 
@@ -538,8 +539,69 @@ Real-time observability dashboard integrated into voice.stankowski.io.
 
 **Access:** https://voice.stankowski.io → click 📊 icon
 
+### FAZA 4.4 - Link Enricher Type/Tags Auto-Detection ✅ 2026-02-08
+
+Extended `notion_link_enricher.py` to auto-classify link entries with Type and Tags using DeepSeek.
+
+- [x] `classify_content()` - DeepSeek API classifies content into Type + Tags
+- [x] `update_note()` - Extended to write Type (rich_text) and Tags (multi_select)
+- [x] Wired into `enrich_links()` main loop
+- [x] `--dry-run` CLI flag for safe testing
+- [x] Fallback: defaults to `Article` + empty tags on failure
+
+**Type values:** Article, Tool, Video, Book, Podcast, Thread, Discussion, Note
+**Tags:** 2-5 short English labels auto-generated from content
+
+**Cost:** ~$0.005/entry (DeepSeek deepseek-chat)
+
+**Files changed:**
+- `/opt/inbox-webhook/notion_link_enricher.py` - Added `classify_content()`, renamed `update_note_content()` → `update_note()`, added `import openai`
+
+**Test:**
+```bash
+ssh hetzner "cd /opt/inbox-webhook && /opt/inbox-webhook/venv/bin/python notion_link_enricher.py --dry-run"
+```
+
+### FAZA 4.5 - Voice App Inbox Access ✅ 2026-02-14
+
+Added inbox message querying to the voice app. Previously, asking "do I have messages?" returned nothing because there was no tool or API endpoint for inbox access.
+
+- [x] `GET /api/inbox` endpoint in PAI API (sorted by timestamp, supports limit & type_filter)
+- [x] `getInboxMessages` voice tool in liveClient.ts
+- [x] Returns voice transcriptions, photo descriptions, text messages
+- [x] Includes AI responses if any were triggered
+
+**New API endpoint (pai_api.py):**
+- `GET /api/inbox?limit=10&type_filter=voice` - List inbox messages (newest first)
+
+**New voice tool (liveClient.ts):**
+- `getInboxMessages` - "check my inbox", "any new messages?", "co mam w inboxie?"
+
+**Files changed:**
+- `/opt/inbox-webhook/pai_api.py` - Added `/api/inbox` endpoint
+- `/mnt/e/voice/nexus-voice-interface/services/liveClient.ts` - Added `getInboxMessages` tool + handler
+
+**Voice commands:**
+```
+"Do I have any messages?" → Lists recent inbox messages
+"Check my inbox" → Same
+"Co mam w inboxie?" → Same (Polish)
+"Show me voice messages" → Filtered by type=voice
+```
+
 ### FAZA 4 - Future
 
+**From claude.ai conversation (Jan 2026) - NOT yet implemented:**
+- [ ] GTD Stage property in Note List (Inbox, Next Actions, Projects, Waiting For, Someday/Maybe, Reference)
+- [ ] Smart Notion Views (Process Inbox, This Week, High Value)
+- [ ] Knowledge Graph / Related Notes (relation field between notes)
+- [ ] Score auto-detection (AI priority 1-5)
+- [ ] Area auto-detection (Work/Private - Type & Tags done, Area missing)
+- [ ] Daily Brief generator (morning summary)
+- [ ] Topic clustering (group notes by themes)
+- [ ] Bulk Import session mode ("5 ideas at once → 5 entries")
+
+**Other future ideas:**
 - [ ] Voice check-in (extend pai-voice-app)
 - [ ] Voice responses (TTS) - send voice messages back
 - [ ] Smart reminders (deadline approaching)
