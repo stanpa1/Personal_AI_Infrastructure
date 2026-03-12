@@ -26,6 +26,7 @@ load_dotenv(BASE_DIR / '.env')
 # Import local modules
 from claude_handler import handle_claude_query, should_process_with_claude
 from telegram_sender import send_message, send_typing_action, send_error_message
+from podcast_handler import detect_podcast_request, handle_podcast_request
 
 # Configure logging
 logging.basicConfig(
@@ -351,15 +352,20 @@ def process_event(event_path: Path):
         if 'metadata' in event:
             result['source_metadata'] = event['metadata']
 
-        # === CLAUDE HANDLER INTEGRATION ===
-        # Check for @pai trigger in text or transcription
+        # === PODCAST / TRANSCRIPT HANDLER ===
         text_to_check = message_text or transcription or ''
-
-        # For voice messages, also check transcription
         if event_type == 'voice' and transcription:
             text_to_check = transcription
 
-        if should_process_with_claude(text_to_check) and chat_id:
+        if detect_podcast_request(text_to_check) and chat_id:
+            logger.info("Podcast/transcript request detected, delegating...")
+            handled, _ = handle_podcast_request(text_to_check, chat_id)
+            if handled:
+                result['podcast_handled'] = True
+
+        # === CLAUDE HANDLER INTEGRATION ===
+        # Check for @pai trigger in text or transcription
+        elif should_process_with_claude(text_to_check) and chat_id:
             logger.info(f"@pai trigger detected, processing with Claude...")
 
             # Send typing indicator

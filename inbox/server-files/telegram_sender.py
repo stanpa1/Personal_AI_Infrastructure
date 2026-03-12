@@ -158,6 +158,80 @@ def send_message(chat_id: int, text: str, parse_mode: Optional[str] = None) -> d
         logger.exception(f"Failed to send Telegram message: {e}")
         return {'success': False, 'error': str(e)}
 
+def send_audio_file(chat_id: int, file_path: str, caption: str = None) -> dict:
+    """
+    Send audio file to Telegram chat.
+
+    Args:
+        chat_id: Telegram chat ID
+        file_path: Path to audio file (MP3, MP4, OGG, etc.)
+        caption: Optional caption for the audio
+
+    Returns:
+        dict with 'success' and optional 'error'
+    """
+    try:
+        token = get_bot_token()
+        url = f"https://api.telegram.org/bot{token}/sendAudio"
+
+        with open(file_path, 'rb') as f:
+            files = {'audio': f}
+            data = {'chat_id': chat_id}
+            if caption:
+                data['caption'] = caption[:1024]  # Telegram caption limit
+
+            response = requests.post(url, files=files, data=data, timeout=120)
+            result = response.json()
+
+        if result.get('ok'):
+            logger.info(f"Audio sent to chat {chat_id}: {file_path}")
+            return {'success': True, 'message_id': result['result']['message_id']}
+        else:
+            error = result.get('description', 'Unknown error')
+            logger.error(f"Failed to send audio: {error}")
+
+            # If file too large for sendAudio (50MB), try sendDocument
+            if 'too big' in error.lower() or 'file is too big' in error.lower():
+                return send_document(chat_id, file_path, caption)
+
+            return {'success': False, 'error': error}
+
+    except Exception as e:
+        logger.exception(f"Failed to send audio file: {e}")
+        return {'success': False, 'error': str(e)}
+
+
+def send_document(chat_id: int, file_path: str, caption: str = None) -> dict:
+    """
+    Send file as document to Telegram chat.
+    Fallback for files too large for sendAudio.
+    """
+    try:
+        token = get_bot_token()
+        url = f"https://api.telegram.org/bot{token}/sendDocument"
+
+        with open(file_path, 'rb') as f:
+            files = {'document': f}
+            data = {'chat_id': chat_id}
+            if caption:
+                data['caption'] = caption[:1024]
+
+            response = requests.post(url, files=files, data=data, timeout=120)
+            result = response.json()
+
+        if result.get('ok'):
+            logger.info(f"Document sent to chat {chat_id}: {file_path}")
+            return {'success': True, 'message_id': result['result']['message_id']}
+        else:
+            error = result.get('description', 'Unknown error')
+            logger.error(f"Failed to send document: {error}")
+            return {'success': False, 'error': error}
+
+    except Exception as e:
+        logger.exception(f"Failed to send document: {e}")
+        return {'success': False, 'error': str(e)}
+
+
 def send_error_message(chat_id: int, error_type: str = "generic") -> dict:
     """Send user-friendly error message"""
     error_messages = {

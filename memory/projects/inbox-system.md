@@ -1,10 +1,11 @@
 # Inbox System - Project Status
 
-**Last Updated:** 2026-02-14 22:30
-**Status:** FAZA 4.5 Complete - Voice App Inbox Access
+**Last Updated:** 2026-02-28
+**Status:** faza-5-in-progress + v4 hooks & Thinking skills cherry-picked
 
 **Repositories:**
 - PAI Infrastructure: https://github.com/stanpa1/Personal_AI_Infrastructure
+- Inbox Webhook: https://github.com/stanpa1/pai-inbox-webhook (private)
 - Voice App: https://github.com/stanpa1/pai-voice-app
 
 ---
@@ -592,6 +593,29 @@ Added inbox message querying to the voice app. Previously, asking "do I have mes
 "Co mam w inboxie?" → Same (Polish)
 "Show me voice messages" → Filtered by type=voice
 ```
+
+### FAZA 5 - Claude Agent SDK Integration ✅ 2026-02-28
+
+- [x] `claude-agent-sdk` 0.1.44 installed in PAI venv
+- [x] `ai_client.py` — shared module: `generate_text(prompt, system_prompt, model=)`
+- [x] `claude_sdk_client.py` — async SDK wrapper with session support
+- [x] `session_store.py` — SQLite per chat_id (24h TTL)
+- [x] `claude_handler.py` — SDK-first + DeepSeek fallback, `/reset` command
+- [x] `process_event.py` — passes chat_id for session continuity
+- [x] All AI modules migrated: insight_generator, research_worker, conversation_handler, notion_link_enricher
+- [x] Model routing: Opus (complex tasks), Haiku (classification/summarization)
+- [x] GitHub repo created: `stanpa1/pai-inbox-webhook` (private)
+- [x] `gh` CLI installed on Hetzner, auth as `stanpa1`
+
+**New files on server:**
+- `/opt/inbox-webhook/ai_client.py` — shared Claude SDK + DeepSeek fallback
+- `/opt/inbox-webhook/claude_sdk_client.py` — session-aware SDK wrapper
+- `/opt/inbox-webhook/session_store.py` — SQLite session persistence
+
+**Key gotchas:**
+- `ANTHROPIC_API_KEY` must be blanked in SDK subprocess env (overrides OAuth)
+- `bypassPermissions` forbidden under root → use `acceptEdits`
+- OAuth token refresh: `scp ~/.claude/.credentials.json hetzner:/root/.claude/`
 
 ### FAZA 4 - Future
 
