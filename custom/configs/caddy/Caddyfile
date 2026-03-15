@@ -1,0 +1,84 @@
+# Global logging
+{
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+}
+
+# Strona na stankowski.io
+stankowski.io, www.stankowski.io {
+    root * /var/www/stankowski.io
+    file_server
+}
+
+# N8N na n8n.stankowski.io
+n8n.stankowski.io {
+    reverse_proxy localhost:5678
+}
+
+# API na api.stankowski.io
+api.stankowski.io {
+    # PAI Search API
+    handle /api/* {
+        reverse_proxy localhost:8001
+    }
+    
+    # Inbox webhook (from n8n)
+    handle /hook/n8n {
+        reverse_proxy localhost:8010
+    }
+
+    # Direct upload endpoint
+    handle /hook/upload {
+        reverse_proxy localhost:8010
+    }
+    
+    # Other n8n webhook endpoints
+    handle /hook/* {
+        reverse_proxy localhost:5678
+    }
+    
+    # Default: main FastAPI
+    handle {
+        reverse_proxy localhost:8000
+    }
+}
+
+# PAI Voice Interface
+voice.stankowski.io {
+    log {
+        output file /var/log/caddy/voice-access.log
+        format json
+    }
+    basic_auth {
+        pawel $2a$14$ljS5uvSAnioa/94hGYFHROvg.V1.62jiCcb2KrXVMVlSQ1If2BigK
+    }
+    root * /var/www/pai-voice
+    file_server
+    encode gzip
+}
+
+# Blood Glue band website
+bloodglue.com, www.bloodglue.com {
+    root * /var/www/bloodglue.com
+    file_server
+    encode gzip
+}
+
+# PAI Terminal (ttyd)
+term.stankowski.io {
+    log {
+        output file /var/log/caddy/term-access.log
+        format json
+    }
+    basic_auth {
+        pawel $2a$14$ljS5uvSAnioa/94hGYFHROvg.V1.62jiCcb2KrXVMVlSQ1If2BigK
+    }
+    reverse_proxy localhost:7681 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

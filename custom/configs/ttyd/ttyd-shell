@@ -1,0 +1,4 @@
+#!/bin/bash
+export TERM=xterm-256color
+export COLORTERM=truecolor
+exec su - pawel -c "tmux new-session -A -s main"
